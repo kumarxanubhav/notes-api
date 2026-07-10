@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Notes</title>
+
+    <!-- Google Fonts: display face for headings, clean sans for body -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Decorative ambient background blobs (pure CSS, no JS needed) -->
+    <div class="bg-decor" aria-hidden="true">
+      <span class="blob blob-a"></span>
+      <span class="blob blob-b"></span>
+      <span class="blob blob-c"></span>
+    </div>
+
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div class="brand">
+          <span class="brand-mark">✎</span>
+          <h1>Notes</h1>
+        </div>
+        <p class="tagline">Small thoughts, kept somewhere safe.</p>
+      </div>
+    </header>
+
+    <main class="layout">
+      <!-- ============ Composer: add / edit note ============ -->
+      <section class="composer glass" aria-labelledby="composer-heading">
+        <h2 id="composer-heading">
+          <span id="composer-mode-label">New note</span>
+        </h2>
+
+        <form id="note-form" novalidate>
+          <input type="hidden" id="note-id" />
+
+          <div class="field">
+            <input
+              type="text"
+              id="note-title"
+              name="title"
+              placeholder=" "
+              autocomplete="off"
+              required
+            />
+            <label for="note-title">Title</label>
+            <span class="field-underline"></span>
+          </div>
+
+          <div class="field">
+            <textarea
+              id="note-content"
+              name="content"
+              placeholder=" "
+              rows="5"
+              required
+            ></textarea>
+            <label for="note-content">Content</label>
+            <span class="field-underline"></span>
+          </div>
+
+          <div class="composer-actions">
+            <button type="submit" id="submit-btn" class="btn btn-primary">
+              <span class="btn-label">Add note</span>
+              <span class="btn-spinner" aria-hidden="true"></span>
+            </button>
+            <button type="button" id="cancel-btn" class="btn btn-ghost hidden">
+              Cancel
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <!-- ============ Notes list ============ -->
+      <section class="notes-section" aria-labelledby="notes-heading">
+        <div class="notes-header">
+          <h2 id="notes-heading">Your notes</h2>
+          <button
+            id="refresh-btn"
+            class="btn btn-ghost btn-icon"
+            title="Refresh notes"
+          >
+            <span class="refresh-icon" aria-hidden="true">↻</span>
+            Refresh
+          </button>
+        </div>
+
+        <!-- Loading state -->
+        <div id="loading-state" class="loading-state hidden">
+          <span class="spinner"></span>
+          <p>Fetching your notes…</p>
+        </div>
+
+        <!-- Empty state -->
+        <div id="empty-state" class="empty-state hidden">
+          <div class="empty-icon" aria-hidden="true">🗒️</div>
+          <h3>No notes yet</h3>
+          <p>Write your first note above — it'll show up right here.</p>
+        </div>
+
+        <div id="notes-list" class="notes-grid"></div>
+      </section>
+    </main>
+
+    <!-- ============ Reusable note card template ============ -->
+    <template id="note-card-template">
+      <article class="note-card glass" data-id="">
+        <div class="note-card-head">
+          <h3 class="note-title"></h3>
+          <span class="note-id"></span>
+        </div>
+        <p class="note-content"></p>
+        <div class="note-actions">
+          <button class="btn btn-ghost btn-sm edit-btn" type="button">
+            Edit
+          </button>
+          <button class="btn btn-danger btn-sm delete-btn" type="button">
+            Delete
+          </button>
+        </div>
+      </article>
+    </template>
+
+    <!-- ============ Delete confirmation dialog ============ -->
+    <div id="confirm-overlay" class="overlay hidden">
+      <div
+        class="confirm-dialog glass"
+        role="alertdialog"
+        aria-modal="true"
+        aria-labelledby="confirm-title"
+      >
+        <h3 id="confirm-title">Delete this note?</h3>
+        <p id="confirm-message">This can't be undone.</p>
+        <div class="confirm-actions">
+          <button id="confirm-cancel" class="btn btn-ghost">Cancel</button>
+          <button id="confirm-delete" class="btn btn-danger">Delete</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ Toast notification container ============ -->
+    <div
+      id="toast-container"
+      class="toast-container"
+      aria-live="polite"
+      aria-atomic="true"
+    ></div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
